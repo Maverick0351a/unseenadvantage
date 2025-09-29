@@ -1,0 +1,7 @@
+# Default ownership
+* @Maverick0351a
+
+# Critical directories
+/src/unseen_advantage/ @Maverick0351a
+/tests/ @Maverick0351a
+/infra/ @Maverick0351a

@@ -11,18 +11,17 @@ WORKDIR /app
 # System deps kept minimal (no compilers) to stay slim
 # If you later need OS libs (e.g., libcblas), apt-get install here.
 
-# Copy only dependency descriptors first for better Docker layer caching
+# Copy dependency descriptors and source for installation
 COPY pyproject.toml ./
-# If you use a README-driven long_description, uncomment:
-# COPY README.md ./
+COPY README.md ./
+COPY src ./src
 
 # Install with 'ui' extra to get FastAPI/uvicorn/Jinja2
 RUN pip install --upgrade pip && \
     pip install --no-cache-dir ".[ui]" || \
     (pip install --no-cache-dir build && python -m build && pip install --no-cache-dir dist/*.whl)
 
-# Now copy the source and examples
-COPY src ./src
+# Copy remaining project assets
 COPY scripts ./scripts
 COPY examples ./examples
 
@@ -30,6 +29,8 @@ COPY examples ./examples
 RUN mkdir -p /app/reports
 
 EXPOSE ${PORT}
+
+ENV PYTHONPATH="/app/src"
 
 # Default: run the API (override in compose if needed)
 CMD ["python", "-m", "uvicorn", "unseen_advantage.api.server:app", "--host", "0.0.0.0", "--port", "8088"]

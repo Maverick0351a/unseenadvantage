@@ -1,132 +1,144 @@
-# Unseen Advantage — Cognitive Market Intelligence
-> **Emergence (LNCP)** · **Exit Timing (TCD)** · **Fragility (CIVI)**
-
-[![CI](https://img.shields.io/github/actions/workflow/status/your-org/your-repo/ci.yml?branch=main&label=CI)](../../actions)
-[![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](LICENSE)
-
-Unseen Advantage applies **Cognitive Tetrad** principles to financial data:
-- **LNCP** – *Latent Narrative Coherence Prediction*: surfaces **emergent narratives** from weak signals.
-- **TCD** – *Temporal Coherence Decay*: quantifies **signal decay** to time exits.
-- **CIVI** – *Cross-Impact Vulnerability Index*: measures **market fragility** via sensitivity analysis.
-
-The platform ships as a **Python SDK + FastAPI Control Panel**, a **CLI**, and a **reproducible demo**.
-
----
-
-## Features
-
-- **LNCP (emergence)**: weak-signal clustering → cross-scale flow → predicted energy drop (ΔE) → **Narrative Potential Energy (NPE)** ranking.
-- **TCD (exits)**: EMA narrative vector; **drift vs origin × recent dilution** → high TCD means it’s time to trim or re-evaluate.
-- **CIVI (fragility)**: standardized small shocks; **Δ Energy** response → higher CIVI signals brittle conditions.
-- **Deterministic embeddings** for demos (SHA-256): reproducible by design; swap in real embeddings any time.
-- **FastAPI Control Panel** (Jinja2/HTMX-ready) and **CLI** for scripted operation.
-- **CI**: unit tests, demo run, and API smoke in GitHub Actions.
-
----
-
-## Quickstart (local)
-
-```bash
-python -m venv .venv
-source .venv/bin/activate          # Windows: .\.venv\Scripts\Activate.ps1
-pip install -U pip
-pip install -e ".[dev,ui]"
-
-# run reproducible demo -> reports/
-python scripts/run_demo.py
-
-# launch API
-uvicorn unseen_advantage.api.server:app --host 0.0.0.0 --port 8088
-# http://127.0.0.1:8088/
-```
-
-
-API endpoints
-
-GET /healthz
-
-POST /score_events – score batch events by InfoGain proxy (demo)
-
-POST /lncp/scan – run emergent narrative scan and return top NPE alerts
-
-CLI
-
-```bash
-# LNCP alerts
-python -m unseen_advantage.cli lncp-scan --events examples/finance_demo/events.csv --out alerts.csv
-
-# Exit watchlist (TCD)
-python -m unseen_advantage.cli tcd-watchlist --events examples/finance_demo/events.csv --assets AAPL,TSLA,NVDA,MSFT --out tcd.csv
-
-# Fragility (CIVI)
-python -m unseen_advantage.cli civi --events examples/finance_demo/events.csv --out civi.json
-```
-
-Docker
-
-Build & run
-
-```bash
-docker build -t unseen-advantage:local .
-docker run --rm -it -p 8088:8088 -v $PWD/reports:/app/reports unseen-advantage:local
-# open http://127.0.0.1:8088/
-```
-
-
-Compose
-
-```bash
-docker compose up -d --build
 docker compose logs -f api
 docker compose run --rm demo
 docker compose down
+# Unseen Advantage — Market Intelligence SaaS (Private Core)
+
+**What it does**  
+Unseen Advantage turns raw financial streams (news, filings, social, macro) into three actionable signals:
+
+- **LNCP (Emergence):** surfaces *new, non-obvious* narratives early.
+- **TCD (Exit Timing):** shows when a thesis is *losing grip* (decay).
+- **CIVI (Fragility):** measures *systemic vulnerability* to small shocks.
+
+**Who it’s for**  
+Quant teams, macro desks, risk managers, and data platforms that need ranked, explainable signals—not another firehose.
+
+---
+
+## Product highlights
+
+- **Multi-tenant API & dashboard** with per-tenant API keys, roles, and usage analytics.  
+- **Plans & quotas** (Starter/Pro/Enterprise) with Stripe billing, trials, and webhooks.  
+- **Fast endpoints** with Redis caching, rate-limiting, and background jobs for batch scans.  
+- **Observability built-in**: Prometheus metrics, OpenTelemetry traces, structured logs.  
+- **Deterministic demo mode**: SHA-based embeddings for fully reproducible examples.
+
+---
+
+## Quickstart (local, dev)
+
+```bash
+python -m venv .venv
+source .venv/bin/activate   # Windows: .\.venv\Scripts\Activate.ps1
+pip install -U pip
+pip install -e ".[dev]"
+cp .env.example .env        # fill STRIPE_* if testing billing
+
+# run services
+
+alembic upgrade head
+uvicorn unseen_advantage.api.server:app --port 8088
+
+# open dashboard
+# http://127.0.0.1:8088/
 ```
 
+API keys: create in the dashboard, use x-api-key header with /v1/* endpoints.
 
-Mounts ./reports for outputs and ./examples for demo inputs.
+Key endpoints
 
-## Reproducible Demo (what to expect)
+GET /healthz
 
-Running `python scripts/run_demo.py` generates:
+POST /v1/score
 
-- `reports/lncp_alerts.csv` – ranked emergent narratives with NPE, ΔE, path, and stability
-- `reports/tcd_watchlist.csv` – per-asset TCD with coherence-to-origin and recent dilution
-- `reports/civi.json` – CIVI (avg ΔEnergy from small shocks; higher → more fragile)
+POST /v1/lncp/scan
 
-The demo uses deterministic embeddings and a small synthetic event set, so results are the same on every run.
+POST /v1/tcd
 
-## Configuration
+POST /v1/civi
 
+GET /metrics (internal)
+
+All endpoints are tenant-scoped, rate-limited, and metered.
+
+Plans & entitlements (example)
+Plan	Seats	QPS	Events/mo	Features
+Starter	1	2	25k	score
+Pro	5	5	250k	score, lncp, tcd
+Enterprise	custom	custom	custom	score, lncp, tcd, civi, SSO
+
+Billing via Stripe. Webhooks update entitlements in real time.
+
+Operations & observability
+
+Metrics: request latency, error rate, 2xx/4xx/5xx, RPS by feature.
+
+Tracing: OTel FastAPI integration.
+
+Logs: structured (JSON), request IDs, no PII in logs.
+
+Audit: user actions written to audit_log.
+
+Contributing (profit-share program)
+
+This repo is private. If you’re invited to contribute:
+
+Sign the CLA.
+
+Our Contributor Profit-Share (see CONTRIBUTORS.md) allocates a portion of net SaaS revenue monthly, weighted by impact.
+
+All contributions must include tests and pass CI.
+
+License
+
+Proprietary (see LICENSE_EULA.md). No redistribution or reverse engineering.
+
+
+---
+
+## 12) Minimal test plan (must pass CI)
+
+- **Unit**: auth, entitlements, rate limiting, LNCP/TCD/CIVI smoke.
+- **API**: 200 on happy paths; 401/403 on bad keys/quotas; webhook signature verify.
+- **Integration**: enqueue LNCP job, confirm output rows appear for tenant.
+- **Performance**: p95 latency guard (e.g., < 200ms for `/v1/score` in dev).
+
+### Copilot prompt
+> Add tests under **tests/** for auth (API key & JWT), entitlements (plan gating), rate-limit (redis), and webhook verification (Stripe mock). Add one perf test for `/v1/score` with small batch.
+
+---
+
+## 13) Profit-share ledger (MVP calculation)
+
+- **Pool** = `pool_pct * net_revenue(month)`
+- **Weights**: `impact_score` (merged code, issues resolved, feature impact) + optional *referral* weight.
+- **Output**: `ProfitShareRun` rows + `ProfitShareGrant` rows per contributor.  
+- **Export**: CSV for accounting + dashboard view for transparency.
+
+### Copilot prompt
+> Implement `compute_profit_share(period_start, period_end, pool_pct)` in `jobs/tasks.py`.  
+> Create `GET /admin/profit-share/:run_id` dashboard view and CSV export.
+
+---
+
+## 14) Deployment notes (pick one now, switch later)
+
+- **Heroku/Render/Fly.io**: simplest to start.  
+- **AWS ECS Fargate**: private subnets, RDS Postgres, ElastiCache, ALB; use Terraform stubs under `infra/terraform/`.  
+- **Cloudflare**: DNS, WAF, bot mitigation, rate-limit at edge (bonus).
+
+---
+
+# TL;DR execution map
+
+1) **Phase A**: EULA/CLA + repo hygiene → CI green  
+2) **Phase B**: Multi-tenant models + Auth + RBAC + Audit  
+3) **Phase C**: Stripe billing + entitlements + webhooks  
+4) **Phase D**: Quotas/rate-limit/metering (Redis)  
+5) **Phase E**: v1 endpoints, Dashboard, Admin  
+6) **Phase F**: Jobs (LNCP nightly, metering, profit-share)  
+7) **Phase G**: Observability & security hardening  
+8) **Phase H**: Docker, compose, CI/CD, deploy staging → prod
+
+If you want, I can also produce a **ready-to-paste EULA + CLA template** and a **set of exact file diffs** for the Phase B+C models/routes so Copilot can apply patches in one go.
 Environment variables (optional):
-
-- `UA_API_KEY` – if set, the API expects header `x-api-key: <value>` (enable gate in your server where appropriate)
-- `PORT` – API port (default 8088)
-
-See `src/unseen_advantage/config.py` for additional knobs.
-
-## Architecture (short)
-
-- **Embeddings**: deterministic SHA-256 embeddings (demo); swap with your encoder later.
-- **LNCP**: cluster weak signals → linear cross-scale flow (W(m)) → energy deltas via PSD kernel → NPE ranking.
-- **TCD**: EMA narrative N_t; TCD = (1 − cos(N_t, N_origin)) × mean(1 − cos(e_new, N_t)).
-- **CIVI**: sample standardized perturbations; propagate; compute ΔEnergy; average.
-
-## Roadmap
-
-- Backtest harness: threshold calibration & hit-rates for LNCP/TCD/CIVI
-- Multi-tenant Control Panel (API keys + RBAC)
-- Optional tensor/bilinear flow in LNCP for richer propagation
-- Data connectors (news, transcripts, filings) and real embeddings
-
-## Contributing
-
-PRs welcome! Please:
-
-- add/modify tests under `tests/`
-- keep demo deterministic
-- include a short note in `CHANGELOG.md` (if present)
-
-License: Apache-2.0 (recommendation; adjust to your preference)
-
-
-> Replace `your-org/your-repo` in the badge URL after you push.

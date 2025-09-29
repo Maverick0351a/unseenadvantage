@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Security & Privacy Incidents
+    url: mailto:security@unseenadvantage.com
+    about: Report urgent security or privacy incidents outside of GitHub issues.
+  - name: General Support
+    url: mailto:support@unseenadvantage.com
+    about: Reach the core team for tenant support or billing questions.
