@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+  <div id="civi-tile" class="bg-white rounded-lg shadow p-4">
+    {% include "partials/civi_tile.html" %}
+    <div class="mt-3">
+      <button class="px-3 py-1 rounded bg-slate-900 text-white"
+              hx-post="/ui/run_civi" hx-target="#civi-tile" hx-swap="outerHTML">
+        Recompute CIVI
+      </button>
+    </div>
+  </div>
+
+  <div class="bg-white rounded-lg shadow p-4">
+    <h3 class="font-medium mb-2">Latent Narrative Coherence Prediction</h3>
+    <p class="text-sm text-slate-600">Find emergent narratives before they’re obvious.</p>
+    <button class="mt-3 px-3 py-1 rounded bg-indigo-600 text-white"
+            hx-post="/ui/run_lncp" hx-target="#lncp-table" hx-swap="outerHTML">
+      Run LNCP
+    </button>
+  </div>
+
+  <div class="bg-white rounded-lg shadow p-4">
+    <h3 class="font-medium mb-2">Temporal Coherence Decay</h3>
+    <p class="text-sm text-slate-600">Spot signals losing their edge (exit timing).</p>
+    <button class="mt-3 px-3 py-1 rounded bg-amber-600 text-white"
+            hx-post="/ui/run_tcd" hx-target="#tcd-table" hx-swap="outerHTML">
+      Refresh Watchlist
+    </button>
+  </div>
+</div>
+
+<div id="lncp-table" class="bg-white rounded-lg shadow p-4">
+  {% include "partials/lncp_table.html" %}
+</div>
+
+<div id="tcd-table" class="bg-white rounded-lg shadow p-4 mt-4">
+  {% include "partials/tcd_table.html" %}
+</div>
+
+{% endblock %}

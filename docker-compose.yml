@@ -1,0 +1,28 @@
+version: "3.9"
+
+services:
+  api:
+    build: .
+    container_name: ua_api
+    environment:
+      # Optional API key gating (add to your server if you want)
+      # UA_API_KEY: "change-me"
+      PORT: "8088"
+    ports:
+      - "8088:8088"
+    volumes:
+      - ./reports:/app/reports
+      - ./examples:/app/examples
+    command: ["python", "-m", "uvicorn", "unseen_advantage.api.server:app", "--host", "0.0.0.0", "--port", "8088"]
+    restart: unless-stopped
+
+  demo:
+    build: .
+    container_name: ua_demo
+    depends_on:
+      - api
+    volumes:
+      - ./reports:/app/reports
+      - ./examples:/app/examples
+    command: ["python", "scripts/run_demo.py"]
+    restart: "no"

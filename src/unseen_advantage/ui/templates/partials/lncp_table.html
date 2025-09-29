@@ -1,0 +1,31 @@
+<h3 class="font-medium mb-3">LNCP Top Alerts</h3>
+{% if lncp and lncp|length > 0 %}
+  <div class="overflow-x-auto">
+    <table class="min-w-full text-sm">
+      <thead class="text-left text-slate-600">
+        <tr>
+          <th class="py-2 pr-4">NPE</th>
+          <th class="py-2 pr-4">ΔE</th>
+          <th class="py-2 pr-4">Path</th>
+          <th class="py-2 pr-4">Stability</th>
+          <th class="py-2 pr-4">Cluster</th>
+          <th class="py-2 pr-4">Asset</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for r in lncp %}
+        <tr class="border-t">
+          <td class="py-2 pr-4">{{ "%.3f"|format(r["npe"]) }}</td>
+          <td class="py-2 pr-4">{{ "%.3f"|format(r["dE"]) }}</td>
+          <td class="py-2 pr-4">{{ "%.3f"|format(r["path"]) }}</td>
+          <td class="py-2 pr-4">{{ "%.3f"|format(r["stab"]) }}</td>
+          <td class="py-2 pr-4">{{ r["cluster_size"] }}</td>
+          <td class="py-2 pr-4">{{ r["asset"] }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+{% else %}
+  <p class="text-sm text-slate-500">No alerts yet. Click “Run LNCP”.</p>
+{% endif %}

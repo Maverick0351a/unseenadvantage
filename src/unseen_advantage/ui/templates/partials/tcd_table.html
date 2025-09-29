@@ -1,0 +1,29 @@
+<h3 class="font-medium mb-3">TCD Watchlist</h3>
+{% if tcd and tcd|length > 0 %}
+  <div class="overflow-x-auto">
+    <table class="min-w-full text-sm">
+      <thead class="text-left text-slate-600">
+        <tr>
+          <th class="py-2 pr-4">Asset</th>
+          <th class="py-2 pr-4">TCD</th>
+          <th class="py-2 pr-4">Coherence(origin)</th>
+          <th class="py-2 pr-4">Dilution</th>
+          <th class="py-2 pr-4">N</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for r in tcd %}
+        <tr class="border-t">
+          <td class="py-2 pr-4 font-medium">{{ r["asset"] }}</td>
+          <td class="py-2 pr-4">{{ "%.3f"|format(r["tcd"]) }}</td>
+          <td class="py-2 pr-4">{{ "%.3f"|format(r["coh_origin"]) }}</td>
+          <td class="py-2 pr-4">{{ "%.3f"|format(r["dilution"]) }}</td>
+          <td class="py-2 pr-4">{{ r["n"] }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+{% else %}
+  <p class="text-sm text-slate-500">No watchlist data available.</p>
+{% endif %}

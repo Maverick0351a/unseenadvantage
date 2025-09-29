@@ -1,0 +1,13 @@
+event_id,ts,asset,text
+e1,2024-01-02T09:30:00Z,AAPL,Apple announces new AI chip for on-device inference
+e2,2024-01-02T10:15:00Z,NVDA,NVIDIA releases next-gen GPU roadmap for data centers
+e3,2024-01-03T12:00:00Z,TSLA,Tesla expands charging network partnership in Europe
+e4,2024-01-04T14:30:00Z,MSFT,Microsoft integrates copilot into enterprise security suite
+e5,2024-01-05T08:45:00Z,AAPL,Quiet supply chain update hints at stronger iPhone demand
+e6,2024-01-05T09:05:00Z,NVDA,Minor fab delay rumor circulates on social media
+e7,2024-01-06T11:10:00Z,TSLA,New ADAS feature passes regulatory milestone in US
+e8,2024-01-07T15:50:00Z,MSFT,Azure adds confidential AI instances for finance workloads
+e9,2024-01-08T10:00:00Z,AAPL,Analyst note discusses Apple services margins generally
+e10,2024-01-09T13:00:00Z,NVDA,Forum chatter about gaming demand mixed signals
+e11,2024-01-10T09:45:00Z,TSLA,Blog speculates on battery sourcing without clear source
+e12,2024-01-11T16:20:00Z,MSFT,Industry article mentions collaboration with a startup
